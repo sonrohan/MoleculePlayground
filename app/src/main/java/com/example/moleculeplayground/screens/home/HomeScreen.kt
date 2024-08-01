@@ -28,37 +28,69 @@ private fun HomeScreen(
 ) {
     Column {
         when (state) {
-            is HomeScreenState.Counting -> {
-                Text(
-                    text = "Money: ${state.count}"
-                )
-
-                AddButton(
-                    text = "Add",
-                    onAddClicked = {
-                        action(HomeAction.Add)
-                    }
-                )
-            }
-            HomeScreenState.Max -> {
-                Text(
-                    text = "You've maxed out your stash :("
-                )
-            }
-            HomeScreenState.NotStarted -> {
-                Text(
-                    text = "Click to get started"
-                )
-
-                AddButton(
-                    text = "Get Started!",
-                    onAddClicked = {
-                        action(HomeAction.Add)
-                    }
-                )
-            }
+            HomeScreenState.NotStarted -> NotStarted(
+                onAddClicked = {
+                    action(HomeAction.Add)
+                }
+            )
+            is HomeScreenState.Counting -> Counting(
+                count = state.count,
+                onAddClicked = {
+                    action(HomeAction.Add)
+                }
+            )
+            HomeScreenState.Max -> Max()
         }
     }
+}
+
+@Composable
+private fun Counting(
+    modifier: Modifier = Modifier,
+    count: Int,
+    onAddClicked: () -> Unit,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Text(
+            text = "Money: $count"
+        )
+
+        AddButton(
+            text = "Add",
+            onAddClicked = onAddClicked,
+        )
+    }
+}
+
+@Composable
+private fun NotStarted(
+    modifier: Modifier = Modifier,
+    onAddClicked: () -> Unit,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Text(
+            text = "Click to get started"
+        )
+
+        AddButton(
+            text = "Get Started!",
+            onAddClicked = onAddClicked,
+        )
+    }
+}
+
+@Composable
+private fun Max(
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        modifier = modifier,
+        text = "You've maxed out your stash :("
+    )
 }
 
 @Composable
