@@ -1,31 +1,24 @@
 package com.example.moleculeplayground.screens.home
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import app.cash.molecule.AndroidUiDispatcher
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.launchMolecule
+import com.example.moleculeplayground.components.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeViewModel @Inject constructor() : ViewModel() {
-    private val scope = CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
+internal class HomeViewModel @Inject constructor() : BaseViewModel<HomeAction, HomeScreenState>() {
 
     private val _counter = MutableStateFlow(0)
 
-    val state: StateFlow<HomeScreenState> = scope.launchMolecule(mode = RecompositionMode.ContextClock) {
+    override val state: StateFlow<HomeScreenState> = createPresenter {
         homeScreenPresenter(
             counterFlow = _counter,
         )
     }
 
-    fun onAction(
+    override fun onAction(
         action: HomeAction,
     ) {
         when (action) {
