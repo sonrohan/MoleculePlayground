@@ -1,4 +1,4 @@
-package com.example.moleculeplayground.components
+package com.example.moleculeplayground.platform
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel

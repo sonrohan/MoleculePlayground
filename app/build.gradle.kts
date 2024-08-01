@@ -23,6 +23,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -75,6 +79,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
     kapt(libs.hilt.android.compiler)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
 }
 
 kapt {
