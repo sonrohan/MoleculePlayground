@@ -13,33 +13,33 @@ import androidx.hilt.navigation.compose.hiltViewModel
 internal fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.models.collectAsState()
 
     HomeScreen(
         state = state,
-        action = viewModel::onAction,
+        action = viewModel::onEvent,
     )
 }
 
 @Composable
 private fun HomeScreen(
-    state: HomeScreenState,
-    action: (HomeAction) -> Unit,
+    state: HomeModel,
+    action: (HomeEvent) -> Unit,
 ) {
     Column {
         when (state) {
-            HomeScreenState.NotStarted -> NotStarted(
+            HomeModel.NotStarted -> NotStarted(
                 onAddClicked = {
-                    action(HomeAction.Add)
+                    action(HomeEvent.Add)
                 }
             )
-            is HomeScreenState.Counting -> Counting(
+            is HomeModel.Counting -> Counting(
                 count = state.count,
                 onAddClicked = {
-                    action(HomeAction.Add)
+                    action(HomeEvent.Add)
                 }
             )
-            HomeScreenState.Max -> Max()
+            HomeModel.Max -> Max()
         }
     }
 }

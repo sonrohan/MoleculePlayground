@@ -12,24 +12,45 @@ import org.junit.Test
 class HomeScreenPresenterTests {
     @Test
     fun `homeScreenPresenter emits correct states`() = runTest {
-        val counter = Channel<Int>()
+        val counter = Channel<HomeEvent>()
 
         moleculeFlow(RecompositionMode.Immediate) {
             homeScreenPresenter(
                 counter.receiveAsFlow(),
             )
         }.test {
-            assertEquals(HomeScreenState.NotStarted, awaitItem())
-            counter.send(1)
-            assertEquals(HomeScreenState.Counting(1), awaitItem())
-            counter.send(2)
-            assertEquals(HomeScreenState.Counting(2), awaitItem())
-            counter.send(3)
-            assertEquals(HomeScreenState.Counting(3), awaitItem())
-            counter.send(9)
-            assertEquals(HomeScreenState.Counting(9), awaitItem())
-            counter.send(10)
-            assertEquals(HomeScreenState.Max, awaitItem())
+            // Initial State
+            assertEquals(HomeModel.NotStarted, awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(1), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(2), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(3), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(4), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(5), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(6), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(7), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(8), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Counting(9), awaitItem())
+
+            counter.send(HomeEvent.Add)
+            assertEquals(HomeModel.Max, awaitItem())
         }
     }
 }

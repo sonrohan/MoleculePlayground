@@ -1,20 +1,35 @@
 package com.example.moleculeplayground.screens.home
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.flow.Flow
 
 @Composable
 internal fun homeScreenPresenter(
-    counterFlow: Flow<Int>,
-): HomeScreenState {
-    val count by counterFlow.collectAsState(initial = 0)
+    events: Flow<HomeEvent>,
+): HomeModel {
+    var counter by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                HomeEvent.Add -> {
+                    if (counter <= 9) {
+                        counter += 1
+                    }
+                }
+            }
+        }
+    }
 
     return when {
-        count == 0 -> HomeScreenState.NotStarted
-        count <= 9 -> HomeScreenState.Counting(count)
-        count > 9 -> HomeScreenState.Max
-        else -> HomeScreenState.Max
+        counter == 0 -> HomeModel.NotStarted
+        counter <= 9 -> HomeModel.Counting(counter)
+        counter > 9 -> HomeModel.Max
+        else -> HomeModel.Max
     }
 }
